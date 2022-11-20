@@ -190,27 +190,17 @@ mint C(ll n, ll k) {
 }
 
 void solve(){
-    ll n, k;
-    cin >> n >> k;
-    mint ans = 0;
-    rep2(i, k){
-        ll len = n - k;
-        if (len >= i)
-            ans = ans + C(len, i) * C(k - 1, k - i) * pow(mint(3), len - i) * pow(mint(2), k - i);
-        if (len >= i - 1)
-            ans = ans + C(len, i - 1) * C(k - 1, k - i) * pow(mint(3), len - i + 1) * pow(mint(2), k - i);
-    }
-    cout << ans << el;
+
 }
 
 signed main() {
     FF;
-//    ll nt;
-//    cin >> nt;
-//    while(nt--) {
-//        solve();
-//    }
-    solve();
+    ll nt;
+    cin >> nt;
+    while(nt--) {
+        solve();
+    }
+//    solve();
 
     return 0;
 }
