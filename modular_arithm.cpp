@@ -24,7 +24,7 @@
 using namespace std;
 
 //#define int long long
-typedef unsigned long long ll;
+typedef long long ll;
 typedef unsigned long long ull;
 typedef long double ld;
 typedef pair<ll, ll> pll;
@@ -178,13 +178,17 @@ using mint = Mint<MD_7>;
 vector<mint> fact(1, 1);
 vector<mint> inv_fact(1, 1);
 
+void init_facts(size_t len){
+    fact.assign(len + 1, 1);
+    inv_fact.assign(len + 1, 1);
+    rep2(i, len) fact[i] = fact[i - 1] * mint(i);
+    inv_fact[len] = inv(fact[len]);
+    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * mint(i);
+}
+
 mint C(ll n, ll k) {
     if (k < 0 || k > n) {
         return 0;
-    }
-    while (sz(fact) < n + 1) {
-        fact.push_back(fact.back() * sz(fact));
-        inv_fact.push_back(1 / fact.back());
     }
     return fact[n] * inv_fact[k] * inv_fact[n - k];
 }
@@ -195,12 +199,12 @@ void solve(){
 
 signed main() {
     FF;
-    ll nt;
-    cin >> nt;
-    while(nt--) {
-        solve();
-    }
-//    solve();
+//    ll nt;
+//    cin >> nt;
+//    while(nt--) {
+//        solve();
+//    }
+    solve();
 
     return 0;
 }
