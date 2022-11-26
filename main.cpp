@@ -75,151 +75,26 @@ const ll INF = INT64_MAX;
 #define repb2(I, N) for (ll I = (N); I >= 1; --I)
 #define FOR(IT, ST, N) for (ll IT = (ST); (IT) <= (N); ++(IT))
 #define FORB(IT, N, ST) for (ll IT = (N); (IT) >= (ST); --(IT))
-
-template <typename T> T mod_inv_in_range(T a, T m) {
-
-    T x = a, y = m;
-    T vx = 1, vy = 0;
-    while (x) {
-        T k = y / x;
-        y %= x;
-        vy -= k * vx;
-        std::swap(x, y);
-        std::swap(vx, vy);
-    }
-    return vy < 0 ? m + vy : vy;
-}
-
-template <typename T> T mod_inv(T a, T m) {
-    a %= m;
-    a = a < 0 ? a + m : a;
-    return mod_inv_in_range(a, m);
-}
-
-template <int MOD_> struct Mint {
-    static constexpr int MOD = MOD_;
-
-private:
-    int v;
-
-public:
-
-    Mint() : v(0) {}
-    Mint(int64_t v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
-    explicit operator int() const { return v; }
-    friend std::ostream& operator << (std::ostream& out, const Mint& n) { return out << int(n); }
-    friend std::istream& operator >> (std::istream& in, Mint& n) { int64_t v_; in >> v_; n = Mint(v_); return in; }
-
-    friend bool operator == (const Mint& a, const Mint& b) { return a.v == b.v; }
-    friend bool operator != (const Mint& a, const Mint& b) { return a.v != b.v; }
-
-    Mint inv() const {
-        Mint res;
-        res.v = mod_inv_in_range(v, MOD);
-        return res;
-    }
-    friend Mint inv(const Mint& m) { return m.inv(); }
-    Mint neg() const {
-        Mint res;
-        res.v = v ? MOD-v : 0;
-        return res;
-    }
-    friend Mint neg(const Mint& m) { return m.neg(); }
-
-    Mint operator- () const {
-        return neg();
-    }
-    Mint operator+ () const {
-        return Mint(*this);
-    }
-
-    Mint& operator ++ () {
-        v ++;
-        if (v == MOD) v = 0;
-        return *this;
-    }
-    Mint& operator -- () {
-        if (v == 0) v = MOD;
-        v --;
-        return *this;
-    }
-    Mint& operator += (const Mint& o) {
-        v -= MOD-o.v;
-        v = (v < 0) ? v + MOD : v;
-        return *this;
-    }
-    Mint& operator -= (const Mint& o) {
-        v -= o.v;
-        v = (v < 0) ? v + MOD : v;
-        return *this;
-    }
-    Mint& operator *= (const Mint& o) {
-        v = int(int64_t(v) * int64_t(o.v) % MOD);
-        return *this;
-    }
-    Mint& operator /= (const Mint& o) {
-        return *this *= o.inv();
-    }
-
-    friend Mint operator ++ (Mint& a, int) { Mint r = a; ++a; return r; }
-    friend Mint operator -- (Mint& a, int) { Mint r = a; --a; return r; }
-    friend Mint operator + (const Mint& a, const Mint& b) { return Mint(a) += b; }
-    friend Mint operator - (const Mint& a, const Mint& b) { return Mint(a) -= b; }
-    friend Mint operator * (const Mint& a, const Mint& b) { return Mint(a) *= b; }
-    friend Mint operator / (const Mint& a, const Mint& b) { return Mint(a) /= b; }
-};
-
-template <typename T> T pow(T a, ll b) {
-    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
-}
-
-using mint = Mint<MD_7>;
-
-vector<mint> fact(1, 1);
-vector<mint> inv_fact(1, 1);
-
-void init_facts(size_t len){
-    fact.assign(len + 1, 1);
-    inv_fact.assign(len + 1, 1);
-    rep2(i, len) fact[i] = fact[i - 1] * mint(i);
-    inv_fact[len] = inv(fact[len]);
-    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * mint(i);
-}
-
-mint C(ll n, ll k) {
-    if (k < 0 || k > n) {
-        return 0;
-    }
-    return fact[n] * inv_fact[k] * inv_fact[n - k];
-}
+template<class T,class T2>int cmin(T &a,T2 b){return a>b?a=b,1:0;}
+template<class T,class T2>int cmax(T &a,T2 b){return a<b?a=b,1:0;}
+template<class T>T sqr(T a){return a*a;}
+template<class T,class T2>T mmin(T a,T2 b){return a<b?a:b;}
+template<class T,class T2>T mmax(T a,T2 b){return a>b?a:b;}
+template<class T,class ...T2>T mmin(T a,T2 ...b){return mmin(a,mmin(b...));}
+template<class T,class ...T2>T mmax(T a,T2 ...b){return mmax(a,mmax(b...));}
 
 void solve(){
-    ll n, k;
-    cin >> n >> k;
-    mint ans = 0;
-    init_facts(n + 4);
-    if (k == 0){
-        cout << pow(mint(3), n) << el;
-        return;
-    }
-    rep2(i, k){
-        ll len = n - k;
-        if (len >= i)
-            ans = ans + C(len, i) * C(k - 1, k - i) * pow(mint(3), len - i) * pow(mint(3), k - i);
-        if (len >= i - 1)
-            ans = ans + C(len, i - 1) * C(k - 1, k - i) * pow(mint(3), len - i + 1) * pow(mint(3), k - i);
-    }
-    cout << ans << el;
+
 }
 
 signed main() {
     FF;
-//    ll nt;
-//    cin >> nt;
-//    while(nt--) {
-//        solve();
-//    }
-    solve();
+    ll nt;
+    cin >> nt;
+    while(nt--) {
+        solve();
+    }
+//    solve();
 
     return 0;
 }
