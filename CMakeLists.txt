@@ -3,4 +3,4 @@ project(my_olymp)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(my_olymp main.cpp )
+add_executable(my_olymp main.cpp)
