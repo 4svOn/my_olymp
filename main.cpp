@@ -20,8 +20,11 @@
 #include <type_traits>
 #include <numeric>
 #include <bitset>
+#include <ext/pb_ds/assoc_container.hpp> // Общий файл.
+#include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
 
 using namespace std;
+using namespace __gnu_pbds;
 
 //#define int long long
 typedef long long ll;
@@ -75,169 +78,48 @@ const ll INF = INT64_MAX;
 #define repb2(I, N) for (ll I = (N); I >= 1; --I)
 #define FOR(IT, ST, N) for (ll IT = (ST); (IT) <= (N); ++(IT))
 #define FORB(IT, N, ST) for (ll IT = (N); (IT) >= (ST); --(IT))
+template<class T,class T2>int cmin(T &a,T2 b){return a>b?a=b,1:0;}
+template<class T,class T2>int cmax(T &a,T2 b){return a<b?a=b,1:0;}
+template<class T>T sqr(T a){return a*a;}
+template<class T,class T2>T mmin(T a,T2 b){return a<b?a:b;}
+template<class T,class T2>T mmax(T a,T2 b){return a>b?a:b;}
+template<class T,class ...T2>T mmin(T a,T2 ...b){return mmin(a,mmin(b...));}
+template<class T,class ...T2>T mmax(T a,T2 ...b){return mmax(a,mmax(b...));}
+template<typename T> istream& operator>>(istream& in, vector<T>& a) {for(auto &x : a) in >> x; return in;}
+template<typename T> ostream& operator<<(ostream& out, vector<T>& a) {for(auto &x : a) out << x << ' '; return out;}
+template<typename T1, typename T2> ostream& operator<<(ostream& out, const pair<T1, T2>& x) {return out << x.f << ' ' << x.s;}
+template<typename T1, typename T2> istream& operator>>(istream& in, pair<T1, T2>& x) {return in >> x.f >> x.s;}
+template<typename T> void Unique(T &a) {a.erase(unique(a.begin(), a.end()), a.end());}
+template<typename T> using ordered_set = tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;
+template<typename T> using ordered_multiset = tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;
+// как set, но две новые функции — это find_by_order() и order_of_key().
+// Первая возвращает итератор на k-ый по величине элемент (отсчёт с нуля), вторая — возвращает количество элементов в множестве, строго меньших, чем наш элемент.
 
-template <typename T> T mod_inv_in_range(T a, T m) {
-
-    T x = a, y = m;
-    T vx = 1, vy = 0;
-    while (x) {
-        T k = y / x;
-        y %= x;
-        vy -= k * vx;
-        std::swap(x, y);
-        std::swap(vx, vy);
-    }
-    return vy < 0 ? m + vy : vy;
+ll gcd(ll a, ll b){
+    return b == 0 ? a : gcd(b, a % b);
 }
 
-template <typename T> T mod_inv(T a, T m) {
-    a %= m;
-    a = a < 0 ? a + m : a;
-    return mod_inv_in_range(a, m);
-}
-
-template <int MOD_> struct Mint {
-    static constexpr int MOD = MOD_;
-
-private:
-    int v;
-
+template<typename Key>
+class Set : public set<Key>{
 public:
-
-    Mint() : v(0) {}
-    Mint(int64_t v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
-    explicit operator int() const { return v; }
-    friend std::ostream& operator << (std::ostream& out, const Mint& n) { return out << int(n); }
-    friend std::istream& operator >> (std::istream& in, Mint& n) { int64_t v_; in >> v_; n = Mint(v_); return in; }
-
-    friend bool operator == (const Mint& a, const Mint& b) { return a.v == b.v; }
-    friend bool operator != (const Mint& a, const Mint& b) { return a.v != b.v; }
-
-    Mint inv() const {
-        Mint res;
-        res.v = mod_inv_in_range(v, MOD);
-        return res;
+    bool contains(Key key) const{
+        return this->find(key) != this->end();
     }
-    friend Mint inv(const Mint& m) { return m.inv(); }
-    Mint neg() const {
-        Mint res;
-        res.v = v ? MOD-v : 0;
-        return res;
-    }
-    friend Mint neg(const Mint& m) { return m.neg(); }
-
-    Mint operator- () const {
-        return neg();
-    }
-    Mint operator+ () const {
-        return Mint(*this);
-    }
-
-    Mint& operator ++ () {
-        v ++;
-        if (v == MOD) v = 0;
-        return *this;
-    }
-    Mint& operator -- () {
-        if (v == 0) v = MOD;
-        v --;
-        return *this;
-    }
-    Mint& operator += (const Mint& o) {
-        v -= MOD-o.v;
-        v = (v < 0) ? v + MOD : v;
-        return *this;
-    }
-    Mint& operator -= (const Mint& o) {
-        v -= o.v;
-        v = (v < 0) ? v + MOD : v;
-        return *this;
-    }
-    Mint& operator *= (const Mint& o) {
-        v = int(int64_t(v) * int64_t(o.v) % MOD);
-        return *this;
-    }
-    Mint& operator /= (const Mint& o) {
-        return *this *= o.inv();
-    }
-
-    friend Mint operator ++ (Mint& a, int) { Mint r = a; ++a; return r; }
-    friend Mint operator -- (Mint& a, int) { Mint r = a; --a; return r; }
-    friend Mint operator + (const Mint& a, const Mint& b) { return Mint(a) += b; }
-    friend Mint operator - (const Mint& a, const Mint& b) { return Mint(a) -= b; }
-    friend Mint operator * (const Mint& a, const Mint& b) { return Mint(a) *= b; }
-    friend Mint operator / (const Mint& a, const Mint& b) { return Mint(a) /= b; }
 };
 
-template <typename T> T pow(T a, ll b) {
-    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
-}
-
-using mint = Mint<998244353>;
-
-vector<mint> fact(1, 1);
-vector<mint> inv_fact(1, 1);
-
-void init_facts(size_t len){
-    fact.assign(len + 1, 1);
-    inv_fact.assign(len + 1, 1);
-    rep2(i, len) fact[i] = fact[i - 1] * mint(i);
-    inv_fact[len] = inv(fact[len]);
-    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * mint(i);
-}
-
-mint C(ll n, ll k) {
-    if (k < 0 || k > n) {
-        return 0;
-    }
-    return fact[n] * inv_fact[k] * inv_fact[n - k];
-}
-
 void solve(){
-    ll n; cin >> n;
-    graph ogr(n, vec(n, -1));
-    rep(i, n){
-        FOR(j, i, n - 1){
-            cin >> ogr[i][j];
-        }
-    }
-    vector<vector<vector<mint>>> dp(n, vector<vector<mint>>(n, vector<mint>(2, 0)));
-    //vector<vector<mint>> dp(n, vector<mint>(n, 0));
-    rep(i, n) {
-        if (ogr[i][i] == 2) {
-            cout << 0 << el;
-            return;
-        }
-        dp[i][i][0] = 2;
-    }
-    FOR(len, 2, n){
-        rep(l, n - len + 1){
-            ll r = l + len - 1;
-            if (ogr[l][r] == 0) {
-                dp[l][r][0] = dp[l][r - 1][0];
-                dp[l][r][1] = dp[l][r - 1][0] + dp[l][r - 1][1] * 2;
-            }
-            else if (ogr[l][r] == 1){
-                dp[l][r][0] = dp[l][r - 1][0];
-                dp[l][r][1] = 0;
-            } else {
-                dp[l][r][0] = 0;
-                dp[l][r][1] = dp[l][r - 1][0] +  dp[l][r - 1][1] * 2;
-            }
-        }
-    }
-    cout << dp[0][n - 1][0] + dp[0][n - 1][1] << el;
-//    cout << dp[0][n - 1][0] << ' ' << dp[0][n - 1][1] << el;
+
 }
 
 signed main() {
     FF;
-//    ll nt;
-//    cin >> nt;
-//    while(nt--) {
-//        solve();
-//    }
-    solve();
+
+    ll nt;
+    cin >> nt;
+    while(nt--) {
+        solve();
+    }
+//    solve();
 
     return 0;
 }
@@ -245,16 +127,7 @@ signed main() {
 // if you have problems, just read the stuff at the bottom
 
 /*
-4
-1 2 0 0
-1 1 1
-1 1
-1
 
-3
-1 2 0
-1 1
-1
 */
 
 /* for inputs
@@ -380,6 +253,38 @@ struct Graph{
         add_one[v] = one - max_way[mxv];
         add_more[v] = more - s[mxv];
         to_add[v] = sz(gr[v]) - 1;
+    }
+};
+
+
+struct seg_tree {
+    ll n;
+    vec tree;
+
+    seg_tree(ll n){
+        while (n & (n - 1)) n++;
+        tree.resize(n * 2 - 1, 0);
+        this->n = n;
+    }
+
+    void update(ll x, ll i) {
+        i += (n - 1);
+        tree[i] = x;
+        while (i > 0) {
+            i = (i - 1) / 2;
+            tree[i] = max(tree[i * 2 + 1], tree[i * 2 + 2]);
+        }
+    }
+
+    ll get(ll v, ll tl, ll tr, ll l, ll r) {
+        if (tl >= l && tr <= r) return tree[v];
+        if (tl >= r || tr <= l) return 0;
+        ll m = (tl + tr) / 2;
+        return max(get(v * 2 + 1, tl, m, l, r), get(v * 2 + 2, m, tr, l, r));
+    }
+
+    ll get(ll l, ll r){
+        return get(0, 0, n, l, r + 1);
     }
 };
 

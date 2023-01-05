@@ -20,8 +20,11 @@
 #include <type_traits>
 #include <numeric>
 #include <bitset>
+#include <ext/pb_ds/assoc_container.hpp> // Общий файл.
+#include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
 
 using namespace std;
+using namespace __gnu_pbds;
 
 //#define int long long
 typedef long long ll;
@@ -75,6 +78,35 @@ const ll INF = INT64_MAX;
 #define repb2(I, N) for (ll I = (N); I >= 1; --I)
 #define FOR(IT, ST, N) for (ll IT = (ST); (IT) <= (N); ++(IT))
 #define FORB(IT, N, ST) for (ll IT = (N); (IT) >= (ST); --(IT))
+template<class T,class T2>int cmin(T &a,T2 b){return a>b?a=b,1:0;}
+template<class T,class T2>int cmax(T &a,T2 b){return a<b?a=b,1:0;}
+template<class T>T sqr(T a){return a*a;}
+template<class T,class T2>T mmin(T a,T2 b){return a<b?a:b;}
+template<class T,class T2>T mmax(T a,T2 b){return a>b?a:b;}
+template<class T,class ...T2>T mmin(T a,T2 ...b){return mmin(a,mmin(b...));}
+template<class T,class ...T2>T mmax(T a,T2 ...b){return mmax(a,mmax(b...));}
+template<typename T> istream& operator>>(istream& in, vector<T>& a) {for(auto &x : a) in >> x; return in;}
+template<typename T> ostream& operator<<(ostream& out, vector<T>& a) {for(auto &x : a) out << x << ' '; return out;}
+template<typename T1, typename T2> ostream& operator<<(ostream& out, const pair<T1, T2>& x) {return out << x.f << ' ' << x.s;}
+template<typename T1, typename T2> istream& operator>>(istream& in, pair<T1, T2>& x) {return in >> x.f >> x.s;}
+template<typename T> void Unique(T &a) {a.erase(unique(a.begin(), a.end()), a.end());}
+template<typename T> using ordered_set = tree<T, null_type,less<T>, rb_tree_tag,tree_order_statistics_node_update>;
+template<typename T> using ordered_multiset = tree<T, null_type,less_equal<T>, rb_tree_tag,tree_order_statistics_node_update>;
+// как set, но две новые функции — это find_by_order() и order_of_key().
+// Первая возвращает итератор на k-ый по величине элемент (отсчёт с нуля), вторая — возвращает количество элементов в множестве, строго меньших, чем наш элемент.
+
+ll gcd(ll a, ll b){
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+template<typename Key>
+class Set : public set<Key>{
+public:
+    bool contains(Key key) const{
+        return this->find(key) != this->end();
+    }
+};
+
 
 template <typename T> T mod_inv_in_range(T a, T m) {
 
