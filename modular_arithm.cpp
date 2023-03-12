@@ -114,3 +114,5 @@ mint C(ll n, ll k) {
     }
     return fact[n] * inv_fact[k] * inv_fact[n - k];
 }
+
+
