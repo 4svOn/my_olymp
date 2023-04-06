@@ -1,4 +1,4 @@
-//#define _CRT_SECURE_NO_WARNINGS
+﻿//#define _CRT_SECURE_NO_WARNINGS
 //#pragma GCC optimize("Ofast")
 //#pragma GCC optimize("unroll-loops")
 
@@ -67,8 +67,8 @@ const ll INF = INT64_MAX;
 #define all(a) a.begin(), a.end()
 #define el '\n'
 #define elf '\n' << flush
-#define nope cout << "NO" << el
-#define yep cout << "YES" << el
+#define nope cout << "No" << el
+#define yep cout << "Yes" << el
 #define FF ios::sync_with_stdio(false); cin.tie(0); cout.tie(0)
 #define rep(I, N) for (ll I = 0; I < (N); ++I)
 #define rep1(I, N) for (ll I = 1; I < (N); ++I)
@@ -85,10 +85,10 @@ template<typename T,typename T2>T mmin(T a,T2 b){return a<b?a:b;}
 template<typename T,typename T2>T mmax(T a,T2 b){return a>b?a:b;}
 template<typename T,typename ...T2>T mmin(T a,T2 ...b){return mmin(a,mmin(b...));}
 template<typename T,typename ...T2>T mmax(T a,T2 ...b){return mmax(a,mmax(b...));}
-template<typename T> istream& operator>>(istream& in, vector<T>& a) {for(auto &x : a) in >> x; return in;}
-template<typename T> ostream& operator<<(ostream& out, vector<T>& a) {for(auto &x : a) out << x << ' '; return out;}
 template<typename T1, typename T2> ostream& operator<<(ostream& out, const pair<T1, T2>& x) {return out << x.F << ' ' << x.S;}
 template<typename T1, typename T2> istream& operator>>(istream& in, pair<T1, T2>& x) {return in >> x.F >> x.S;}
+template<typename T> istream& operator>>(istream& in, vector<T>& a) {for(auto &x : a) in >> x; return in;}
+template<typename T> ostream& operator<<(ostream& out, vector<T>& a) {for(auto &x : a) out << x << ' '; return out;}
 template<typename T> void Unique(T &a) {a.erase(unique(a.begin(), a.end()), a.end());}
 template<typename T> using ordered_set = __gnu_pbds::tree<T, __gnu_pbds::null_type,less<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
 template<typename T> using ordered_multiset = __gnu_pbds::tree<T, __gnu_pbds::null_type,less_equal<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
@@ -99,6 +99,10 @@ ll GCD(ll a, ll b){
     return b == 0 ? a : GCD(b, a % b);
 }
 
+ll LCM(ll a, ll b){
+    return a * b / GCD(a, b);
+}
+
 template<typename Key>
 class Set : public set<Key>{
 public:
@@ -107,19 +111,67 @@ public:
     }
 };
 
-void solve(){
+template <typename T> T pow(T a, ll b) {
+    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
+}
 
+struct my{
+    ll x, pos, change;
+};
+
+bool comp(const my& a, const my& b) {
+    if (a.x == b.x) {
+        return a.change > b.change;
+    }
+    return a.x < b.x;
+}
+
+void solve(){
+    ll n, k; cin >> n >> k;
+    vec f(n), d(n); cin >> f >> d;
+    vec p(n);
+    ll ans = INF;
+    rep(pos, n) {
+        ll cur = f[pos] * d[pos];
+        rep(i, n) {
+            if (f[i] * d[i] < cur || f[i] * d[i] > cur + k) {
+                ll new_d = (cur + k) / f[i];
+                ll new_p = new_d * f[i];
+                if (new_p < cur || new_p > cur + k) {
+                    can = 0;
+                    break;
+                }
+                ++c;
+            }
+        }
+        if (can) cmin(ans, c);
+
+        can = 1; c = 0;
+        rep(i, n) {
+            if (f[i] * d[i] > cur || f[i] * d[i] < cur - k) {
+                ll new_d = cur / f[i];
+                ll new_p = new_d * f[i];
+                if (new_p > cur || new_p < cur - k) {
+                    can = 0;
+                    break;
+                }
+                ++c;
+            }
+        }
+        if (can) cmin(ans, c);
+    }
+    if (ans == INF) cout << n << el;
+    else cout << ans << el;
 }
 
 signed main() {
     FF;
 
-    ll nt;
-    cin >> nt;
-    while(nt--) {
+
+
+    ll nt; cin >> nt;
+    while(nt--)
         solve();
-    }
-//    solve();
 
     return 0;
 }
@@ -130,13 +182,10 @@ signed main() {
 */
 
 /*
-some help:
-
 1) cmp for set:
 bool cmp(const ll& a, const ll& b) {
  ........
 }
 using comp = integral_constant<decltype(&cmp), &cmp>;
 set <plll, comp> arr;
-
  */

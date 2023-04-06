@@ -67,8 +67,8 @@ const ll INF = INT64_MAX;
 #define all(a) a.begin(), a.end()
 #define el '\n'
 #define elf '\n' << flush
-#define nope cout << "NO" << el
-#define yep cout << "YES" << el
+#define nope cout << "No" << el
+#define yep cout << "Yes" << el
 #define FF ios::sync_with_stdio(false); cin.tie(0); cout.tie(0)
 #define rep(I, N) for (ll I = 0; I < (N); ++I)
 #define rep1(I, N) for (ll I = 1; I < (N); ++I)
@@ -115,36 +115,58 @@ template <typename T> T pow(T a, ll b) {
     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
 }
 
+const ll C = 15;
+ll dp[C + 10];
+ll pref[C + 10];
+
 void solve(){
     ll n; cin >> n;
-    vec a(n); cin >> a;
-    multiset <ll> q;
-    cout << 1 << ' ';
-    q.insert(a[0]);
-    vecc used(n + 1, 0);
-    ll c = 0, ans = 1;
-    rep1(i, n){
-        ll w = i + 1;
-        if (a[i] < w){
-            if (!used[a[i]]) {
-                ++c;
-                used[a[i]] = 1;
+//    if (n <= dp[2]) {
+//        ll c = 0;
+//        rep2(i, 100) {
+//            if (i % 10 == 4 || i / 10 == 4) continue;
+//            ++c;
+//            if (c == n) {
+//                cout << i << el;
+//                return;
+//            }
+//        }
+//    }
+    ll pr = 0, len = 0;
+    ll ans = 0;
+    while (n > 0) {
+        ll c = 0, now = 0, pr_c = 0, pr_now = 0;
+        rep(pw, C) {
+            rep(i, 10) {
+                if (pw == 0 && i == 0) continue;
+                if (c >= n) break;
+                pr_c = c;
+                pr_now = now;
+                if (i == 4) {
+                    continue;
+                }
+                now = pow(10ll, pw) * i;
+                c += pow(10ll, pw) - dp[pw];
             }
-        } else q.insert(a[i]);
-        while(!q.empty() && *q.begin() == w){
-            q.erase(q.begin());
-            if (!used[w]) {
-                ++c;
-                used[w] = 1;
-            }
+            if (c >= n) break;
         }
-        cout << (q.empty() ?  c + sz(q) << ' ';
+        ans += now;
+        if (c == n) break;
+        n -= pr_c;
     }
-    cout << el;
+    cout << ans << el;
 }
 
 signed main() {
     FF;
+
+    dp[1] = 1;
+    ll q = 10;
+    FOR(i, 2, C) {
+        dp[i] = dp[i - 1] * 8 + q;
+        pref[i] = pref[i - 1] + dp[i];
+        q *= 10;
+    }
 
     ll nt; cin >> nt;
     while(nt--)
@@ -156,11 +178,6 @@ signed main() {
 // if you have problems, just read the stuff at the bottom
 
 /*
-4
-1 2 6 7
-
-4
-1 6 7 8
 */
 
 /*
