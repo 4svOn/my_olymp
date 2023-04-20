@@ -2,10 +2,11 @@ ll gcd(ll a, ll b){
     return b == 0 ? a : gcd(b, a % b);
 }
 
-vector <string> split_by_char(string &s, char c){
+vector <string> split_by_char(string &s, char c) {
+    if (s.empty()) return {};
     int i = int(s.find(c)), prev = 0;
     vector <string> ans;
-    do{
+    do {
         ans.push_back(s.substr(prev, i - prev));
         prev = i + 1;
     } while ((i = int(s.find(c, prev))) != -1);

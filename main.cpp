@@ -22,6 +22,7 @@
 #include <bitset>
 #include <ext/pb_ds/assoc_container.hpp> // Общий файл.
 #include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
+#include <forward_list>
 
 using namespace std;
 //using namespace __gnu_pbds;
@@ -115,63 +116,16 @@ template <typename T> T pow(T a, ll b) {
     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
 }
 
-struct my{
-    ll x, pos, change;
-};
+void solve() {
 
-bool comp(const my& a, const my& b) {
-    if (a.x == b.x) {
-        return a.change > b.change;
-    }
-    return a.x < b.x;
-}
-
-void solve(){
-    ll n, k; cin >> n >> k;
-    vec f(n), d(n); cin >> f >> d;
-    vec p(n);
-    ll ans = INF;
-    rep(pos, n) {
-        ll cur = f[pos] * d[pos];
-        rep(i, n) {
-            if (f[i] * d[i] < cur || f[i] * d[i] > cur + k) {
-                ll new_d = (cur + k) / f[i];
-                ll new_p = new_d * f[i];
-                if (new_p < cur || new_p > cur + k) {
-                    can = 0;
-                    break;
-                }
-                ++c;
-            }
-        }
-        if (can) cmin(ans, c);
-
-        can = 1; c = 0;
-        rep(i, n) {
-            if (f[i] * d[i] > cur || f[i] * d[i] < cur - k) {
-                ll new_d = cur / f[i];
-                ll new_p = new_d * f[i];
-                if (new_p > cur || new_p < cur - k) {
-                    can = 0;
-                    break;
-                }
-                ++c;
-            }
-        }
-        if (can) cmin(ans, c);
-    }
-    if (ans == INF) cout << n << el;
-    else cout << ans << el;
 }
 
 signed main() {
     FF;
 
-
-
     ll nt; cin >> nt;
-    while(nt--)
-        solve();
+        while(nt--)
+    solve();
 
     return 0;
 }
@@ -179,6 +133,7 @@ signed main() {
 // if you have problems, just read the stuff at the bottom
 
 /*
+
 */
 
 /*
