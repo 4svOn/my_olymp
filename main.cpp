@@ -1,6 +1,8 @@
 ﻿//#define _CRT_SECURE_NO_WARNINGS
-//#pragma GCC optimize("Ofast")
-//#pragma GCC optimize("unroll-loops")
+#ifndef LOCAL
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
+#endif
 
 #include <iostream>
 #include <stdio.h>
@@ -20,8 +22,8 @@
 #include <type_traits>
 #include <numeric>
 #include <bitset>
-#include <ext/pb_ds/assoc_container.hpp> // Общий файл.
-#include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
+//#include <ext/pb_ds/assoc_container.hpp> // Общий файл.
+//#include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
 #include <forward_list>
 
 using namespace std;
@@ -67,7 +69,7 @@ const ll INF = INT64_MAX;
 #define sz(a) (ll)(a.size())
 #define all(a) a.begin(), a.end()
 #define el '\n'
-#define elf '\n' << flush
+#define elf el << flush
 #define nope cout << "No" << el
 #define yep cout << "Yes" << el
 #define FF ios::sync_with_stdio(false); cin.tie(0); cout.tie(0)
@@ -91,8 +93,8 @@ template<typename T1, typename T2> istream& operator>>(istream& in, pair<T1, T2>
 template<typename T> istream& operator>>(istream& in, vector<T>& a) {for(auto &x : a) in >> x; return in;}
 template<typename T> ostream& operator<<(ostream& out, vector<T>& a) {for(auto &x : a) out << x << ' '; return out;}
 template<typename T> void Unique(T &a) {a.erase(unique(a.begin(), a.end()), a.end());}
-template<typename T> using ordered_set = __gnu_pbds::tree<T, __gnu_pbds::null_type,less<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
-template<typename T> using ordered_multiset = __gnu_pbds::tree<T, __gnu_pbds::null_type,less_equal<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
+//template<typename T> using ordered_set = __gnu_pbds::tree<T, __gnu_pbds::null_type,less<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
+//template<typename T> using ordered_multiset = __gnu_pbds::tree<T, __gnu_pbds::null_type,less_equal<T>, __gnu_pbds::rb_tree_tag,__gnu_pbds::tree_order_statistics_node_update>;
 // Как set, но две новые функции — это find_by_order() и order_of_key().
 // Первая возвращает итератор на k-ый по величине элемент (отсчёт с нуля), вторая — возвращает количество элементов в множестве, строго меньших, чем наш элемент.
 
@@ -124,8 +126,8 @@ signed main() {
     FF;
 
     ll nt; cin >> nt;
-        while(nt--)
-    solve();
+    while(nt--)
+        solve();
 
     return 0;
 }
