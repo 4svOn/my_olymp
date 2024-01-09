@@ -114,8 +114,23 @@ public:
     }
 };
 
-template <typename T> T pow(T a, ll b) {
+template <typename T>
+T pow(T a, ll b) {
     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
+}
+
+template <class C, class P>
+constexpr auto FindIfPtr(C&& c, P pred) {
+    auto found = find_if(c.begin(), c.end(), pred);
+    return found == c.end() ? nullptr : &*found;
+}
+
+template <class C, class P>
+constexpr size_t FindIndexIf(C&& c, P p) {
+    using std::begin;
+    using std::end;
+    auto it = find_if(c.begin(), c.end(), p);
+    return it == c.end() ? -1 : (it - c.begin());
 }
 
 void solve() {
