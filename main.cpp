@@ -51,7 +51,7 @@ const ld EPS = 0.000000001;
 const ll MD_7 = 1000000007;
 const ll MD_9 = 1000000009;
 const ll MD = 228228227;
-const ll INF = INT64_MAX;
+const ll INF = _I64_MAX;
 #define pb push_back
 #define eb emplace_back
 #define ass assign
