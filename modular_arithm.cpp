@@ -1,6 +1,8 @@
-template <typename T> T mod_inv_in_range(T a, T m) {
+struct mint;
+ll MOD = MD_7;
 
-    T x = a, y = m;
+template <typename T> T mod_inv_in_range(T a, ll mod = MOD) {
+    T x = a, y = mod;
     T vx = 1, vy = 0;
     while (x) {
         T k = y / x;
@@ -9,16 +11,14 @@ template <typename T> T mod_inv_in_range(T a, T m) {
         std::swap(x, y);
         std::swap(vx, vy);
     }
-    return vy < 0 ? m + vy : vy;
+    return vy < 0 ? mod + vy : vy;
 }
 
-template <typename T> T mod_inv(T a, T m) {
-    a %= m;
-    a = a < 0 ? a + m : a;
-    return mod_inv_in_range(a, m);
+template <typename T> T mod_inv(T a, ll mod = MOD) {
+    a %= mod;
+    a = a < 0 ? a + mod : a;
+    return mod_inv_in_range(a, mod);
 }
-
-int MOD = MD_7;
 
 struct mint {
 private:
@@ -38,7 +38,7 @@ public:
 
     mint inv() const {
         mint res;
-        res.v = mod_inv_in_range(v, MOD);
+        res.v = mod_inv_in_range(v);
         return res;
     }
     friend mint inv(const mint& m) { return m.inv(); }
@@ -99,7 +99,7 @@ public:
 vector<mint> fact(1, 1);
 vector<mint> inv_fact(1, 1);
 
-void init_facts(size_t len){
+void init_facts(ll len){
     fact.assign(len + 1, 1);
     inv_fact.assign(len + 1, 1);
     rep2(i, len) fact[i] = fact[i - 1] * mint(i);
@@ -114,4 +114,33 @@ mint C(ll n, ll k) {
     return fact[n] * inv_fact[k] * inv_fact[n - k];
 }
 
+vector<vector<mint>> dp_binom;
 
+void init_binom_dp(ll len) {
+    dp_binom.assign(len + 2, vector<mint>(len + 2, 0));
+    dp_binom[0][0] = 1;
+    rep2(n, len) {
+        dp_binom[n][0] = 1;
+        rep2(k, n + 1) {
+            dp_binom[n][k] = dp_binom[n - 1][k - 1] + dp_binom[n - 1][k];
+        }
+    }
+}
+
+mint C_dp(ll n, ll k) {
+    if (k < 0 || k > n) {
+        return 0;
+    }
+    k = min(k, n - k);
+    return dp_binom[n][k]; 
+}
+
+mint C_raw(ll n, ll k) {
+    if (k < 0 || k > n) return 0;
+    k = min(k, n - k);
+    mint result = 1;
+    rep2(i, k) {
+        result = result * (n - k + i) / i;
+    }
+    return result;
+}
