@@ -28,10 +28,10 @@ public:
 
     mint() : v(0) {}
     mint(int v_) : v(v_ % MOD) { if (v < 0) v += MOD; }
-    mint(int64_t v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
+    mint(ll v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
     explicit operator int() const { return v; }
     friend std::ostream& operator << (std::ostream& out, const mint& n) { return out << int(n); }
-    friend std::istream& operator >> (std::istream& in, mint& n) { int64_t v_; in >> v_; n = mint(v_); return in; }
+    friend std::istream& operator >> (std::istream& in, mint& n) { ll v_; in >> v_; n = mint(v_); return in; }
 
     friend bool operator == (const mint& a, const mint& b) { return a.v == b.v; }
     friend bool operator != (const mint& a, const mint& b) { return a.v != b.v; }
@@ -77,7 +77,7 @@ public:
         return *this;
     }
     mint& operator *= (const mint& o) {
-        v = int(int64_t(v) * int64_t(o.v) % MOD);
+        v = int(ll(v) * ll(o.v) % MOD);
         return *this;
     }
     mint& operator /= (const mint& o) {
@@ -140,7 +140,7 @@ mint C_raw(ll n, ll k) {
     k = min(k, n - k);
     mint result = 1;
     rep2(i, k) {
-        result = result * (n - k + i) / i;
+        result = result * mint(n - k + i) / mint(i);
     }
     return result;
 }
