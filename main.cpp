@@ -4,27 +4,9 @@
 #pragma GCC optimize("unroll-loops")
 #endif
 
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-#include <iomanip>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <string>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <unordered_map>
-#include <unordered_set>
-#include <cstdio>
-#include <type_traits>
-#include <numeric>
-#include <bitset>
+#include <bits/stdc++.h>
 //#include <ext/pb_ds/assoc_container.hpp> // Общий файл.
 //#include <ext/pb_ds/tree_policy.hpp> // Содержит класс tree_order_statistics_node_update
-#include <forward_list>
 
 using namespace std;
 //using namespace __gnu_pbds;
@@ -51,7 +33,7 @@ const ld EPS = 0.000000001;
 const ll MD_7 = 1000000007;
 const ll MD_9 = 1000000009;
 const ll MD = 228228227;
-const ll INF = _I64_MAX;
+const ll INF = 1e18 + 10;
 #define pb push_back
 #define eb emplace_back
 #define ass assign
@@ -106,14 +88,6 @@ ll LCM(ll a, ll b){
     return a * b / GCD(a, b);
 }
 
-template<typename Key>
-class Set : public set<Key>{
-public:
-    bool contains(Key key) const{
-        return this->find(key) != this->end();
-    }
-};
-
 template <typename T>
 T pow(T a, ll b) {
     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
@@ -132,6 +106,126 @@ constexpr size_t FindIndexIf(C&& c, P p) {
     auto it = find_if(c.begin(), c.end(), p);
     return it == c.end() ? -1 : (it - c.begin());
 }
+
+template <typename T> T mod_inv_in_range(T a, T m) {
+
+    T x = a, y = m;
+    T vx = 1, vy = 0;
+    while (x) {
+        T k = y / x;
+        y %= x;
+        vy -= k * vx;
+        std::swap(x, y);
+        std::swap(vx, vy);
+    }
+    return vy < 0 ? m + vy : vy;
+}
+
+template <typename T> T mod_inv(T a, T m) {
+    a %= m;
+    a = a < 0 ? a + m : a;
+    return mod_inv_in_range(a, m);
+}
+
+int MOD = MD_7;
+
+struct Mint {
+private:
+    int v;
+
+public:
+
+    Mint() : v(0) {}
+    Mint(int v_) : v(v_ % MOD) { if (v < 0) v += MOD; }
+    Mint(int64_t v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
+    explicit operator int() const { return v; }
+    friend std::ostream& operator << (std::ostream& out, const Mint& n) { return out << int(n); }
+    friend std::istream& operator >> (std::istream& in, Mint& n) { int64_t v_; in >> v_; n = Mint(v_); return in; }
+
+    friend bool operator == (const Mint& a, const Mint& b) { return a.v == b.v; }
+    friend bool operator != (const Mint& a, const Mint& b) { return a.v != b.v; }
+
+    Mint inv() const {
+        Mint res;
+        res.v = mod_inv_in_range(v, MOD);
+        return res;
+    }
+    friend Mint inv(const Mint& m) { return m.inv(); }
+    Mint neg() const {
+        Mint res;
+        res.v = v ? MOD-v : 0;
+        return res;
+    }
+    friend Mint neg(const Mint& m) { return m.neg(); }
+
+    Mint operator- () const {
+        return neg();
+    }
+    Mint operator+ () const {
+        return Mint(*this);
+    }
+
+    Mint& operator ++ () {
+        v ++;
+        if (v == MOD) v = 0;
+        return *this;
+    }
+    Mint& operator -- () {
+        if (v == 0) v = MOD;
+        v --;
+        return *this;
+    }
+    Mint& operator += (const Mint& o) {
+        v -= MOD-o.v;
+        v = (v < 0) ? v + MOD : v;
+        return *this;
+    }
+    Mint& operator -= (const Mint& o) {
+        v -= o.v;
+        v = (v < 0) ? v + MOD : v;
+        return *this;
+    }
+    Mint& operator *= (const Mint& o) {
+        v = int(int64_t(v) * int64_t(o.v) % MOD);
+        return *this;
+    }
+    Mint& operator /= (const Mint& o) {
+        return *this *= o.inv();
+    }
+
+    friend Mint operator ++ (Mint& a, int) { Mint r = a; ++a; return r; }
+    friend Mint operator -- (Mint& a, int) { Mint r = a; --a; return r; }
+    friend Mint operator + (const Mint& a, const Mint& b) { return Mint(a) += b; }
+    friend Mint operator - (const Mint& a, const Mint& b) { return Mint(a) -= b; }
+    friend Mint operator * (const Mint& a, const Mint& b) { return Mint(a) *= b; }
+    friend Mint operator / (const Mint& a, const Mint& b) { return Mint(a) /= b; }
+};
+
+// template <typename T> T pow(T a, ll b) {
+//     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
+// }
+
+vector<Mint> fact(1, 1);
+vector<Mint> inv_fact(1, 1);
+
+void init_facts(size_t len){
+    fact.assign(len + 1, 1);
+    inv_fact.assign(len + 1, 1);
+    rep2(i, len) fact[i] = fact[i - 1] * Mint(i);
+    inv_fact[len] = inv(fact[len]);
+    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * Mint(i);
+}
+
+Mint C(ll n, ll k) {
+    if (k < 0 || k > n) {
+        return 0;
+    }
+    return fact[n] * inv_fact[k] * inv_fact[n - k];
+}
+
+
+
+
 
 void solve() {
 

@@ -18,15 +18,16 @@ template <typename T> T mod_inv(T a, T m) {
     return mod_inv_in_range(a, m);
 }
 
-template <int MOD_> struct Mint {
-    static constexpr int MOD = MOD_;
+int MOD = MD_7;
 
+struct Mint {
 private:
     int v;
 
 public:
 
     Mint() : v(0) {}
+    Mint(int v_) : v(v_ % MOD) { if (v < 0) v += MOD; }
     Mint(int64_t v_) : v(int(v_ % MOD)) { if (v < 0) v += MOD; }
     explicit operator int() const { return v; }
     friend std::ostream& operator << (std::ostream& out, const Mint& n) { return out << int(n); }
@@ -91,24 +92,22 @@ public:
     friend Mint operator / (const Mint& a, const Mint& b) { return Mint(a) /= b; }
 };
 
-template <typename T> T pow(T a, ll b) {
-    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
-}
+// template <typename T> T pow(T a, ll b) {
+//     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
+// }
 
-using mint = Mint<MD_7>;
-
-vector<mint> fact(1, 1);
-vector<mint> inv_fact(1, 1);
+vector<Mint> fact(1, 1);
+vector<Mint> inv_fact(1, 1);
 
 void init_facts(size_t len){
     fact.assign(len + 1, 1);
     inv_fact.assign(len + 1, 1);
-    rep2(i, len) fact[i] = fact[i - 1] * mint(i);
+    rep2(i, len) fact[i] = fact[i - 1] * Mint(i);
     inv_fact[len] = inv(fact[len]);
-    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * mint(i);
+    repb2(i, len) inv_fact[i - 1] = inv_fact[i] * Mint(i);
 }
 
-mint C(ll n, ll k) {
+Mint C(ll n, ll k) {
     if (k < 0 || k > n) {
         return 0;
     }
