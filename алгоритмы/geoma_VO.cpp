@@ -7,6 +7,7 @@
 using namespace std;
 
 const double eps = 1e-9;
+const double PI = 3.14159265358979323846;
 
 class Point;
 class Vector;
@@ -42,7 +43,7 @@ public:
         double angle = atan2(y, x);
         if (angle < 0)
         {
-            angle += 2 * M_PI;
+            angle += 2 * PI;
         }
         return angle;
     }
@@ -186,7 +187,7 @@ public:
         double angle = atan2(y, x);
         if (angle < 0)
         {
-            angle += 2 * M_PI;
+            angle += 2 * PI;
         }
         return angle;
     }
@@ -306,7 +307,7 @@ double cross_product(Vector v1, Vector v2)
 double vectors_angle(Vector v1, Vector v2)
 {
     if ((v1 == Vector(0, 0)) || (v2 == Vector(0, 0)))
-        return M_PI / 2.0;
+        return PI / 2.0;
     return acos(dot_product(v1, v2) / (v1.length() * v2.length()));
 }
 
