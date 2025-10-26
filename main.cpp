@@ -80,33 +80,6 @@ template<typename T> void Unique(T &a) {a.erase(unique(a.begin(), a.end()), a.en
 // Как set, но две новые функции — это find_by_order() и order_of_key().
 // Первая возвращает итератор на k-ый по величине элемент (отсчёт с нуля), вторая — возвращает количество элементов в множестве, строго меньших, чем наш элемент.
 
-ll GCD(ll a, ll b){
-    return b == 0 ? a : GCD(b, a % b);
-}
-
-ll LCM(ll a, ll b){
-    return a * b / GCD(a, b);
-}
-
-template <typename T>
-T pow(T a, ll b) {
-    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
-}
-
-template <class C, class P>
-constexpr auto FindIfPtr(C&& c, P pred) {
-    auto found = find_if(c.begin(), c.end(), pred);
-    return found == c.end() ? nullptr : &*found;
-}
-
-template <class C, class P>
-constexpr size_t FindIndexIf(C&& c, P p) {
-    using std::begin;
-    using std::end;
-    auto it = find_if(c.begin(), c.end(), p);
-    return it == c.end() ? -1 : (it - c.begin());
-}
-
 void solve() {
 
 }

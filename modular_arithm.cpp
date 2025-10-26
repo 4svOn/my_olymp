@@ -92,9 +92,9 @@ public:
     friend mint operator / (const mint& a, const mint& b) { return mint(a) /= b; }
 };
 
-// template <typename T> T pow(T a, ll b) {
-//     T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
-// }
+template <typename T> T pow(T a, ll b) {
+    T r = 1; while (b) { if (b & 1) r *= a; b >>= 1; a *= a; } return r;
+}
 
 vector<mint> fact(1, 1);
 vector<mint> inv_fact(1, 1);
@@ -132,7 +132,7 @@ mint C_dp(ll n, ll k) {
         return 0;
     }
     k = min(k, n - k);
-    return dp_binom[n][k]; 
+    return dp_binom[n][k];
 }
 
 mint C_raw(ll n, ll k) {
